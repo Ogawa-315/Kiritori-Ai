@@ -1,0 +1,42 @@
+{
+  "name": "kiritori-ai",
+  "version": "1.0.0",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:renderer\" \"npm:dev:main\"",
+    "dev:renderer": "cd renderer && npm run dev",
+    "dev:main": "wait-on http://localhost:5173 && npm run build:main && electron .",
+    "build": "npm run build:renderer && npm run build:main",
+    "build:renderer": "cd renderer && npm run build",
+    "build:main": "tsc -p main/tsconfig.json",
+    "package": "npm run build && electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/screenshot-desktop": "^1.12.3",
+    "concurrently": "^9.1.2",
+    "electron": "^36.4.0",
+    "electron-builder": "^26.0.12",
+    "screenshot-desktop": "^1.15.1",
+    "sharp": "^0.34.2",
+    "typescript": "^5.8.3",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.example.screenshot-app",
+    "productName": "ScreenshotApp",
+    "files": [
+      "dist/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    }
+  },
+  "dependencies": {
+    "lucide-react": "^0.515.0",
+    "react-router-dom": "^7.6.2"
+  }
+}
