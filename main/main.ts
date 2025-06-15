@@ -64,12 +64,11 @@ function createCaptureWindow() {
     });
 
     const screenshotUrl = `file://${imgPath}`;
-    const query = `?screenshotPath=${encodeURIComponent(screenshotUrl)}`;
-    
+    const query = `?screenshotPath=${encodeURIComponent(screenshotUrl)}`;    
     // const url = isDev
     //   ? `http://localhost:5173/overlay${query}`
     //   : `file://${path.join(__dirname, `../renderer/index.html`)}/overlay/${query}`;
-    const url = `file://${path.join(__dirname, `../renderer/index.html`)}/overlay/${query}`;
+    const url = `file://${path.join(__dirname, `../renderer/index.html`)}${query}#/overlay`;
     captureWindow.loadURL(url);
 
     // キャプチャウィンドウが閉じた時の処理

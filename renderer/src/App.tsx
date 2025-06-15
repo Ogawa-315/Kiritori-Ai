@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import KiritoriAI from "./pages/Main";
 import Overlay from "./pages/Overlay";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<KiritoriAI />} />
         <Route path="/overlay" element={<Overlay />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
