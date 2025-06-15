@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Settings, Sparkles, Calculator, HelpCircle, FileText, Edit3, Languages, Send, Loader2, Image, Check, Copy } from 'lucide-react';
 import { callAnthropic, callGoogle, callOpenAI } from '../lib/models';
+import TitleBar from '../components/TitleBar';
+import ReactMarkdown from 'react-markdown';
+
 
 interface Model {
   id: string;
@@ -49,6 +52,10 @@ const KiritoriAI: React.FC = () => {
     }
   };
 
+  const handleClick = () => {
+  window.electronAPI.openExternal();
+  console.log("外部ページ")
+};
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('formula');
 
@@ -202,12 +209,16 @@ const KiritoriAI: React.FC = () => {
     };
 
   return (
-    <div className="overflow-y-auto overflow-x-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600 font-sans flex flex-col items-center p-8">
+    <div className="overflow-x-hidden bg-gradient-to-br from-indigo-500 via-purple-500 to-purple-600 font-sans flex flex-col items-center p-8">
+        <TitleBar />
+        <div className='w-full h-[30px]'></div>
+        <div className='overflow-y-auto w-full flex flex-col items-center'>
       {/* Header */}
       <div className="overflow-x-hidden overflow-y-hidden w-full max-w-4xl flex justify-between items-center mb-8 text-white">
-        <div className="text-sm opacity-80">
+        <button className="text-sm opacity-80 cursor-pointer" 
+         onClick={handleClick}>
           使い方
-        </div>
+        </button>
         <div className="flex items-center gap-2 text-sm opacity-80">
           <span>モデル: {selectedModelData?.name || '未選択'}</span>
           <button
@@ -452,10 +463,11 @@ const KiritoriAI: React.FC = () => {
         </button>
       </div>
       <div className="bg-white p-4 rounded border relative">
-        <pre className="whitespace-pre-wrap text-sm">{result}</pre>
+        <ReactMarkdown>{result}</ReactMarkdown>
       </div>
     </div>
       )}
+      </div>
       </div>
     </div>
   );

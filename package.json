@@ -9,34 +9,52 @@
     "build": "npm run build:renderer && npm run build:main",
     "build:renderer": "cd renderer && npm run build",
     "build:main": "tsc -p main/tsconfig.json",
-    "package": "npm run build && electron-builder"
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Ogawa",
+  "license": "MIT",
   "description": "",
   "devDependencies": {
     "@types/screenshot-desktop": "^1.12.3",
     "concurrently": "^9.1.2",
     "electron": "^36.4.0",
     "electron-builder": "^26.0.12",
-    "screenshot-desktop": "^1.15.1",
-    "sharp": "^0.34.2",
     "typescript": "^5.8.3",
     "wait-on": "^8.0.3"
   },
   "build": {
     "appId": "com.example.screenshot-app",
-    "productName": "ScreenshotApp",
+    "productName": "Kiritori-Ai",
     "files": [
-      "dist/**/*"
+      "dist/**/*",
+      "node_modules/**/*"
     ],
     "directories": {
       "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
     }
   },
   "dependencies": {
     "lucide-react": "^0.515.0",
-    "react-router-dom": "^7.6.2"
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.6.2",
+    "screenshot-desktop": "^1.15.1",
+    "sharp": "^0.34.2"
   }
 }

@@ -6,6 +6,10 @@ export interface IElectronAPI {
   closeCaptureWindow: () => void;
   onScreenshotBase64: (callback: (base64: string) => void) => void;
   ipcRendererReady: () => void;
+  minimize: () => Promise<void>;
+  maximize: () => Promise<void>;
+  close: () => Promise<void>;
+  openExternal: () => void;
 }
 
 declare global {

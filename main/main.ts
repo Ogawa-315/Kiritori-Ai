@@ -1,5 +1,5 @@
 // main/main.ts
-import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain, screen, shell } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import screenshot from 'screenshot-desktop';
@@ -19,11 +19,15 @@ let isMainWindowReady = false;
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 1000,
-    height: 600,
+    height: 800,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, 
+      nodeIntegration: false,  
     },
   });
+  
     const url = isDev
       ? `http://localhost:5173`
       : `file://${path.join(__dirname, `../renderer/index.html`)}`;
@@ -68,27 +72,6 @@ function createCaptureWindow() {
 
     captureWindow.loadURL(url);
 
-    // --- 追加: ウィンドウ表示後にBase64データを送信 ---
-//     captureWindow.webContents.once('did-finish-load', () => {
-//       // 画像ファイルをBase64として読み込み
-//       if (!captureWindow) return; // ウィンドウが既に閉じられていた場合
-
-//   fs.readFile(imgPath, (err, data) => {
-//     if (err) {
-//       console.error('Failed to read screenshot:', err);
-//       return;
-//     }
-//     const base64 = data.toString('base64');
-
-//     if (isMainWindowReady && mainWindow && mainWindow.webContents) {
-//       mainWindow.webContents.send('screenshot-base64', base64);
-//     } else {
-//       console.error("MainWindow is not ready to receive the screenshot.");
-//       // ここでエラー通知や再試行ロジックを実装することも可能です
-//     }
-//   });
-//     });
-
     // キャプチャウィンドウが閉じた時の処理
     captureWindow.on('closed', () => {
       captureWindow = null;
@@ -112,7 +95,6 @@ function createCaptureWindow() {
 }
 
 app.whenReady().then(() => {
-  // --- ▼ 変更点 4: アプリ起動時にメインウィンドウを作成 ---
   createMainWindow();
 
   // ショートカットが押された時の処理
@@ -136,6 +118,10 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createMainWindow();
     }
+  });
+
+  ipcMain.on('open-external', () => {
+  shell.openExternal('https://kiritori-lp.vercel.app/instraction');
   });
 });
 
@@ -181,6 +167,16 @@ ipcMain.on('capture-rect', (event, rect: { x: number, y: number, width: number, 
     })
     .catch(err => console.error("Failed to process image:", err));
 });
+
+ipcMain.handle('minimize-window', () => {if(mainWindow){mainWindow.minimize()}});
+  ipcMain.handle('maximize-window', () => {
+    if (mainWindow&&mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else if(mainWindow){
+      mainWindow.maximize();
+    }
+  });
+  ipcMain.handle('close-window', () =>{if(mainWindow) mainWindow.close()});
 
 ipcMain.on('close-capture-window', () => {
   if (captureWindow) {

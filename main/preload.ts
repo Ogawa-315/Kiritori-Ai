@@ -1,5 +1,5 @@
 // main/preload.ts
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer} from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   sendCaptureRect: (rect: any, screenshotPath: string) => {
@@ -16,5 +16,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   ipcRendererReady: () =>{
     ipcRenderer.send('main-window-ready');
-  }
+  },
+  minimize: () => ipcRenderer.invoke('minimize-window'),
+  maximize: () => ipcRenderer.invoke('maximize-window'),
+  close: () => ipcRenderer.invoke('close-window'),
+  openExternal: () => ipcRenderer.send('open-external'),
 });
