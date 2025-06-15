@@ -5,7 +5,7 @@ import fs from 'fs';
 import screenshot from 'screenshot-desktop';
 import sharp from 'sharp';
 
-const isDev = process.env.NODE_ENV !== 'production';
+// const isDev = process.env.NODE_ENV !== 'production';
 
 let mainWindow: BrowserWindow | null = null;
 let captureWindow: BrowserWindow | null = null;
@@ -28,10 +28,10 @@ function createMainWindow() {
     },
   });
   
-    const url = isDev
-      ? `http://localhost:5173`
-      : `file://${path.join(__dirname, `../renderer/index.html`)}`;
-
+    // const url = isDev
+    //   ? `http://localhost:5173`
+    //   : `file://${path.join(__dirname, `../renderer/index.html`)}`;
+  const url = `file://${path.join(__dirname, `../renderer/index.html`)}`;
     mainWindow.loadURL(url);
     mainWindow.on('closed', () => {
     mainWindow = null;
@@ -66,10 +66,10 @@ function createCaptureWindow() {
     const screenshotUrl = `file://${imgPath}`;
     const query = `?screenshotPath=${encodeURIComponent(screenshotUrl)}`;
     
-    const url = isDev
-      ? `http://localhost:5173/overlay${query}`
-      : `file://${path.join(__dirname, `../renderer/index.html`)}/overlay/${query}`;
-
+    // const url = isDev
+    //   ? `http://localhost:5173/overlay${query}`
+    //   : `file://${path.join(__dirname, `../renderer/index.html`)}/overlay/${query}`;
+    const url = `file://${path.join(__dirname, `../renderer/index.html`)}/overlay/${query}`;
     captureWindow.loadURL(url);
 
     // キャプチャウィンドウが閉じた時の処理
