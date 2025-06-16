@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Settings, Sparkles, Calculator, HelpCircle, FileText, Edit3, Languages, Send, Loader2, Image, Check, Copy } from 'lucide-react';
 import { callAnthropic, callGoogle, callOpenAI } from '../lib/models';
 import TitleBar from '../components/TitleBar';
@@ -41,15 +41,14 @@ const KiritoriAI: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [base64FromMain, setBase64FromMain] = useState<string | undefined>(undefined);
   const [copied, setCopied] = useState(false);
+  const copyTextRef = useRef<HTMLDivElement>(null);
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(result);
+      if (!copyTextRef.current) return;
+      const htmlContent = copyTextRef.current.innerHTML;
+      await navigator.clipboard.writeText(htmlContent);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // 2秒後にリセット
-    } catch (err) {
-      console.error('コピーに失敗しました:', err);
-    }
   };
 
   const handleClick = () => {
@@ -462,7 +461,7 @@ const KiritoriAI: React.FC = () => {
           )}
         </button>
       </div>
-      <div className="bg-white p-4 rounded border relative">
+      <div className="bg-white p-4 rounded border relative" ref={copyTextRef}>
         <ReactMarkdown>{result}</ReactMarkdown>
       </div>
     </div>
